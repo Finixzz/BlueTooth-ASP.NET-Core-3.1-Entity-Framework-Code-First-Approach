@@ -1,0 +1,43 @@
+﻿@model BlueTooth.Models.Rating
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+    <div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+        <div style="padding:20px; font-size:25px; border:1px solid #0275d8; border-radius:5px; box-shadow: 2px -1px 18px 4px rgba(2,117,216,1);">
+            Vaši komentari su nam itekako bitni. Upravo pomoću istih smo u mogućnosti da poboljšamo vaše iskustvo koristeći ovu aplikaciju. Ocjenite naš rad te uputite bilo kakve prijedloge ili primjedbe na isti.
+            Vaš BlueTooth Tim.
+        </div>
+        <br /><br />
+        <form asp-action="SpremiRecenziju" asp-controller="Recenzije">
+            <div class="form-group">
+                <label asp-for="Mark">Ocjena</label>
+                <select asp-for="Mark">
+                    <option value=0>Odaberite ocjenu</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                </select>
+                <span asp-validation-for="Mark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment">Vaš komentar</label>
+                <input asp-for="Comment" type="text" height="50" class="form-control" />
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; padding:5px;">Pošalji recenziju</button>
+            <br /><br />
+            <a class="btn btn-success" style="color: white;width: 100%;" asp-action="Index" asp-controller="Home">Odustani</a>
+        </form>
+
+    </div>
+
+@section scripts{
+    <script src="~/jquery-validation/jquery.validate.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}
+

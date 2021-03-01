@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewData["Title"] = "EditUsluga";
+    Layout = "~/Views/_Layout.cshtml";
+
+}
+
+<form id="editUsluga" style="width:70%; margin-left:auto; margin-right:auto;">
+    <div class="form-group">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <label for="Name">Ime usluge</label>
+        <input for="Name" id="name" type="text" name="name" class="form-control" autocomplete="off" />
+        <span validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Price">Jedinična cijena usluge</label>
+        <input for="Price" id="price" type="text" name="price" class="form-control" />
+        <span validation-for="Price" class="text-danger"></span>
+    </div>
+    <button id="save" class="btn btn-success" type="button">Spremi</button>
+    <a class="btn btn-primary" asp-action="Index" asp-controller="Usluge">Poništi</a>
+</form>
+
+@section scripts{
+    <script src="~/jquery-validation/jquery.validate.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script>
+        "use strict"
+
+
+        $(document).ready(function () {
+            let href = location.href;
+            let numOfSlashes = 0;
+            for (let i = 0; i < href.length; i++) {
+                if (href[i] == "/")
+                    numOfSlashes++;
+            }
+            let uslugaID = 0;
+            let br = 0;
+            for (let i = 0; i < href.length; i++) {
+                if (br == numOfSlashes) {
+                    uslugaID = uslugaID * 10 + (parseInt(href[i]));
+                } else
+                    if (href[i] == "/")
+                        br++;
+            }
+
+            $.ajax({
+                method: "GET",
+                url: "/api/services/" + uslugaID,
+                dataType: "json",
+                data: "{}",
+                success: function (service) {
+                    console.log(service);
+                    $("#name").val(service.name);
+                    $("#price").val(service.price);
+                }
+            })
+
+            $.validator.addMethod("ImeIsValid", (val) => {
+                return /[a-z]/.test(val) || /[A-Z]/.test(val);
+            });
+            $.validator.addMethod("PriceIsValid", (val) => {
+                return /[0-9]/.test(val);
+            },"Molimo unesite validnu jediničnu cijenu")
+            $("#editUsluga").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        ImeIsValid: true
+                    },
+                    price: {
+                        required: true,
+                        PriceIsValid: true
+                    }
+                }
+            })
+            $("#save").on("click", function () {
+                if ($("#editUsluga").valid()) {
+                    let usluga = {
+                        id:uslugaID,
+                        name:$("#name").val(),
+                        price:parseFloat($("#price").val())
+                    };
+                    $.ajax({
+                        method: "PUT",
+                        url: "/api/services/" + uslugaID,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify(usluga),
+                        success: function () {
+                            location.href = "/Usluge";
+                        },
+                        error: function () {
+                            toastr.error("Molimo refreshujte stranicu i provjerite unos na formi!");
+                        }
+                    })
+                } 
+            })
+        })
+    </script>
+}
+

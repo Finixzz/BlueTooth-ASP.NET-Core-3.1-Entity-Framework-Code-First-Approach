@@ -1,0 +1,72 @@
+﻿@model IEnumerable<BlueTooth.ViewModels.RadnikCreateViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+@if (!Model.Any())
+{
+    <div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+        <h1>Trenutno nema konfigurisanih zaposlenika !</h1>
+        <a asp-action="DodajRadnika" asp-controller="Osoblje" class="btn btn-primary">Dodaj radnika</a>
+        <br /><br />
+        <a asp-action="DodajARadnika" asp-controller="Osoblje" class="btn btn-primary">Dodaj administrativnog radnika</a>
+
+    </div>
+}
+else
+{
+
+<div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+    <a asp-action="DodajRadnika" asp-controller="Osoblje" class="btn btn-primary">Dodaj medicinskog radnika</a>
+
+    <br /><br />
+    <a asp-action="DodajARadnika" asp-controller="Osoblje" class="btn btn-primary">Dodaj administrativnog radnika</a>
+    <br /><br />
+    <a asp-action="OtpusteniRadnici" asp-controller="Osoblje" class="btn btn-primary">Prikaži otpuštene radnike</a>
+    <br /><br />
+    <table id="radnici" class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">Ime Prezime</th>
+                <th scope="col">Kvalifikacija</th>
+                <th scope="col">Akcija</th>
+                <th scope="col">Akcija</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                int j = i + 1;
+                <tr>
+                    <th scope="col">@j</th>
+                    <th scope="col">@Model.ElementAt(i).Email</th>
+                    <th scope="col">@Model.ElementAt(i).FirstName  @Model.ElementAt(i).LastName</th>
+                    <th scope="col">@Model.ElementAt(i).Qualification</th>
+                    <th scope="col"><a asp-action="Detalji" asp-controller="Osoblje" asp-route-workerId="@Model.ElementAt(i).Id" class="btn btn-success" style="text-align:center;">Detaljnije</a></th>
+                    <form asp-action="OtpustiRadnika" asp-controller="Osoblje" asp-route-workerId="@Model.ElementAt(i).Id">
+                        <th scope="col"><button asp-action="OtpustiRadnika" asp-controller="Osoblje" asp-route-workerId="@Model.ElementAt(i).Id" class="btn btn-danger" style="text-align:center;" onclick="return confirm('Jeste li sigurni da želite otpustiti ovog radnika?')">X</button></th>
+                    </form>
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+
+}
+
+@section scripts{
+    <script src="~/jquery-validation/jquery.validate.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#radnici").DataTable();
+        });
+    </script>
+}
+
+

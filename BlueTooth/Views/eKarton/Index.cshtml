@@ -1,0 +1,88 @@
+﻿@model IEnumerable<BlueTooth.ViewModels.PrikaziUspostavljeneDijagnozePacijentaViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@if (!Model.Any())
+{
+    <div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+        <h1>Trenutno nema evidentiranih oboljenja u vašem eKatonu</h1>
+
+    </div>
+}
+else
+{
+    <div class="d-container" style="width:80%; margin-left:auto; margin-right:auto;">
+        <table id="dijagnozePacijenta" class="table">
+            <thead>
+                <tr class="table-info">
+                    <th scope="col">#</th>
+                    <th scope="col">Email doktora</th>
+                    <th scope="col">Ime prezime</th>
+                    <th scope="col">Dijagnoza</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Napomena</th>
+                    <th scope="col">Usluge</th>
+                </tr>
+            </thead>
+            <tbody id="tableContent">
+                @for(int i = 0; i < Model.Count(); i++)
+                {
+                    int k = i + 1;
+                    <tr>
+               
+                        <th scope="col">@k</th>
+                        <td scope="col">
+                        @for(int j = 0; j < Model.ElementAt(i).Doktori.Count(); j++)
+                        {
+                            @Model.ElementAt(i).Doktori.ElementAt(j).Email 
+                            <hr />
+                        }
+                        </td>
+                        <td scope="col">
+                        @for(int j = 0; j < Model.ElementAt(i).Doktori.Count(); j++)
+                        {
+                            @Model.ElementAt(i).Doktori.ElementAt(j).FirstName   @Model.ElementAt(i).Doktori.ElementAt(j).LastName 
+                            <hr />
+                        }
+                        </td>
+                        <th scope="col">@Model.ElementAt(i).Dijagnoza</th>
+                        <th scope="col">@Model.ElementAt(i).Datum</th>
+                        @if (@Model.ElementAt(i).Napomena == "")
+                        {
+                            <th scope="col">Bez napomene</th>
+
+                        }
+                        else
+                        {
+                            <th scope="col">@Model.ElementAt(i).Napomena</th>
+
+                        }
+                        <td scope="col">
+                            @for (int j = 0; j < Model.ElementAt(i).Usluge.Count(); j++)
+                            {
+
+
+
+                                @Model.ElementAt(i).Usluge.ElementAt(j).Name
+                                <hr />
+
+
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#dijagnozePacijenta").DataTable();
+        })
+    </script>
+
+}

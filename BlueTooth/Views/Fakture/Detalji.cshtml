@@ -1,0 +1,50 @@
+﻿@model BlueTooth.ViewModels.PrikaziDetaljeFaktureViewModel
+@{
+    ViewData["Title"] = "Detalji";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+    <br /><br />
+          <div class="card border-secondary mb-3" style="width:700px; margin-left:auto;margin-right:auto;">
+              <div class="card-header">Šifra izdate fakture: @Model.Id</div>
+              <div class="card-header">Šifra dentalnog pregleda: @Model.DentalCheckId</div>
+              <div class="card-body text-secondary">
+                  <table id="fakturaDetalji">
+                      <thead>
+                          <tr>
+                              <td style="text-align:center;">Usluga</td>
+                              <td style="text-align:center;">Jedinična cijena usluge</td>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          @for (int i = 0; i < Model.Usluge.Count(); i++)
+                          {
+                              <tr style="justify-content:center;">
+                                  <td style="text-align:center;">@Model.Usluge.ElementAt(i).Name</td>
+                                  <td style="text-align:center;">@Model.Usluge.ElementAt(i).Price KM</td>
+                              </tr>
+                          }
+                      </tbody>
+
+                  </table>
+              </div>
+              <div class="card-footer">
+                  <h5 style="margin-left:330px;">Ukupna cijena: @Model.TotalPrice KM</h5>
+                  <h6 style="margin-left:200px; ">Datum izdavanja fakture: @Model.Time</h6>
+              </div>
+              <a asp-action="PrikaziFakture" asp-controller="Fakture" class="btn btn-primary">Povratak</a>
+
+          </div>
+
+</div>
+@section scripts{ 
+
+    <script>
+        $(document).ready(function () {
+            $("#fakturaDetalji").DataTable();
+        })
+    </script>
+}
+
+

@@ -1,0 +1,360 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<BlueTooth.Models.ApplicationUser> signInManager
+@inject UserManager<BlueTooth.Models.ApplicationUser> userManager
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <script src="https://kit.fontawesome.com/54eff19f06.js" crossorigin="anonymous"></script>
+    <!--Datatables css-->
+    <link href="~/datatables/css/jquery.dataTables.css" rel="stylesheet" />
+
+    <link href="~/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/dhtmlxscheduler_material.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+
+</head>
+<body>
+    @if ((signInManager.IsSignedIn(User) && User.IsInRole("Vlasnik")))
+    {
+        <nav>
+            <div class="logo">
+                <a asp-action="index" asp-controller="home">
+                    <img width="40" src="~/images/Dentist Cloud Logo.png" />
+                </a>
+            </div>
+            <ul id="nav-links" class="nav-links">
+                <li><a asp-action="" asp-controller="">Home</a></li>
+                <li><a asp-action="Index" asp-controller="eKarton">eKarton</a></li>
+                <li><a asp-action="Index" asp-controller="Account" id="podaci">Lični podaci</a></li>
+                <div class="dropdown">
+                    <a id="manage" class="dropbtn dropdown-toggle">Manage</a>
+                    <div class="dropdown-content">
+                        <li><a asp-action="Index" asp-controller="Usluge">Usluge</a></li>
+                        <li><a id="recenzijeAkcija" asp-action="Prikaz" asp-controller="Recenzije" style="display:flex;flex-direction:row; justify-content:space-between;">Recenzije   <div id="divNotifikacija" style="width:27px;display:none; height:27px; border-radius:50%; background-color:red; margin-left:5%; text-align:center;"><p id="notifikacija"></p></div></a></li>
+                        <li><a asp-action="Index" asp-controller="Osoblje">Osoblje</a></li>
+                        <li><a id="faktureAkcijaVlasnik" asp-action="PrikaziFakture" asp-controller="Fakture" style="display:flex;flex-direction:row; justify-content:space-between;">Fakture  <div id="divNotifikacijaFaktureVlasnik" style="width:27px;display:none; height:27px; border-radius:50%; background-color:red; margin-left:5%; text-align:center;"><p id="notifikacijaFaktureVlasnik"></p></div></a></li>
+                        <li><a asp-action="" asp-controller="">Materijal</a></li>
+
+                    </div>
+                </div>
+
+            </ul>
+            <ul class="nav-links-2">
+
+                <li>
+                    <form method="post" asp-controller="account" asp-action="logout" style="display:flex;">
+                        <button style="background-color:transparent;border:0; color:white;">
+                            Logout @User.Identity.Name
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+            <div class="toggle-button">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+
+
+    }
+    else if ((signInManager.IsSignedIn(User) && User.IsInRole("Radnik")))
+    {
+        <nav>
+            <div class="logo">
+                <a asp-action="index" asp-controller="home">
+                    <img width="50" src="~/images/Dentist Cloud Logo.png" />
+                </a>
+            </div>
+            <ul id="nav-links" class="nav-links">
+                <li><a asp-action="" asp-controller="">Home</a></li>
+                <li><a asp-action="Index" asp-controller="Account" id="podaci">Lični podaci</a></li>
+                <div class="dropdown">
+                    <a class="dropbtn dropdown-toggle">Manage</a>
+                    <div class="dropdown-content">
+                        <li><a asp-action="Index" asp-controller="UspostaviDijagnozu">Uspostavi dijagnozu</a></li>
+                        <li><a asp-action="" asp-controller="">Zaduženja</a></li>
+                        <li><a asp-action="Index" asp-controller="ObavljeniPregledi">Obavljeni pregledi</a></li>
+                    </div>
+                </div>
+
+            </ul>
+            <ul class="nav-links-2">
+
+                <li>
+                    <form method="post" asp-controller="account" asp-action="logout" style="display:flex;">
+                        <button style="background-color:transparent;border:0; color:white;">
+                            Logout @User.Identity.Name
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+            <div class="toggle-button">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+
+        var user = await userManager.FindByNameAsync(User.Identity.Name);
+        if (user != null)
+        {
+            var result = await signInManager.CheckPasswordSignInAsync(user, "Radnik1122??", false);
+            if (result.Succeeded)
+            {
+                <div class="card" style="position:fixed; z-index:999; width:30%; background-color:#d9534f;right:0.8%;top:15%;">
+                    <div class="card-body">
+
+                        <p style="color: white; font-weight:bold;">Molimo Vas da radi sigurnosnih razloga promijenite defaultno postavljenu šifru. Konfiguraciju izvršite klikom na Lične podatke, dugme Promijeni lozinku</p>
+                    </div>
+                </div>
+            }
+        }
+
+
+    }
+    else if ((signInManager.IsSignedIn(User) && User.IsInRole("ARadnik")))
+    {
+        <nav>
+            <div class="logo">
+                <a asp-action="index" asp-controller="home">
+                    <img width="50" src="~/images/Dentist Cloud Logo.png" />
+                </a>
+            </div>
+            <ul id="nav-links" class="nav-links">
+                <li><a asp-action="" asp-controller="">Home</a></li>
+                <li><a asp-action="Index" asp-controller="Account" id="podaci">Lični podaci</a></li>
+                <div class="dropdown">
+                    <a id="manageFakture" class="dropbtn dropdown-toggle">Manage</a>
+                    <div class="dropdown-content">
+                        <li><a id="faktureAkcija" asp-action="Index" asp-controller="Fakture" style="display:flex;flex-direction:row; justify-content:space-between;">Fakture  <div id="divNotifikacijaFakture" style="width:27px;display:none; height:27px; border-radius:50%; background-color:red; margin-left:5%; text-align:center;"><p id="notifikacijaFakture"></p></div></a></li>
+                        <li><a asp-action="PrikaziFakture" asp-controller="Fakture">Izdate fakture</a></li>
+                        <li><a asp-action="" asp-controller="">Statistika poslovanja</a></li>
+                    </div>
+                </div>
+
+            </ul>
+            <ul class="nav-links-2">
+
+                <li>
+                    <form method="post" asp-controller="account" asp-action="logout" style="display:flex;">
+                        <button style="background-color:transparent;border:0; color:white;">
+                            Logout @User.Identity.Name
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+            <div class="toggle-button">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+
+        var user = await userManager.FindByNameAsync(User.Identity.Name);
+        if (user != null)
+        {
+            var result = await signInManager.CheckPasswordSignInAsync(user, "Radnik1122??", false);
+            if (result.Succeeded)
+            {
+                <div class="card" style="position:fixed; z-index:999; width:30%; background-color:#d9534f;right:0.8%;top:15%;">
+                    <div class="card-body">
+
+                        <p style="color: white; font-weight:bold;">Molimo Vas da radi sigurnosnih razloga promijenite defaultno postavljenu šifru. Konfiguraciju izvršite klikom na Lične podatke, dugme Promijeni lozinku</p>
+                    </div>
+                </div>
+            }
+        }
+
+    }
+    else if (signInManager.IsSignedIn(User))
+    {
+        <nav>
+            <div class="logo">
+                <a asp-action="index" asp-controller="home">
+                    <img width="50" src="~/images/Dentist Cloud Logo.png" />
+                </a>
+            </div>
+            <ul id="nav-links" class="nav-links">
+                <li><a asp-action="" asp-controller="">Home</a></li>
+                <li><a asp-action="Index" asp-controller="Account" id="podaci">Lični podaci</a></li>
+                <div class="dropdown">
+                    <a id="manageDijagnoze" class="dropbtn dropdown-toggle">Manage</a>
+                    <div class="dropdown-content">
+                        <li><a asp-action="Index" asp-controller="Termin">Rezerviši pregled</a></li>
+                        <li><a id="eKartonAkcija" asp-action="Index" asp-controller="eKarton" style="display:flex;flex-direction:row; justify-content:space-between;">eKarton <div id="divNotifikacijaDijagnoze" style="width:27px;display:none; height:27px; border-radius:50%; background-color:red; margin-left:5%; text-align:center;"><p id="notifikacijaDijagnoze"></p></div></a></li>
+                        <li><a asp-action="Index" asp-controller="Recenzije">Ocjenite naš rad</a></li>
+                    </div>
+                </div>
+            </ul>
+            <ul class="nav-links-2">
+
+                <li>
+                    <form method="post" asp-controller="account" asp-action="logout" style="display:flex;">
+                        <button class="logout" style="background-color:transparent;border:0; color:white;">
+                            Logout @User.Identity.Name
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+            <div class="toggle-button">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+
+    }
+    else
+    {
+
+        <nav>
+            <div class="logo">
+                <a asp-action="index" asp-controller="home">
+                    <img width="30" src="~/images/Dentist Cloud Logo.png" />
+                </a>
+            </div>
+            <ul id="nav-links" class="nav-links">
+                <li><a href="#pozadina">O nama</a></li>
+                <li><a href="#info">Kako radi?</a></li>
+
+            </ul>
+            <ul class="nav-links-2">
+                <li><a asp-action="register" asp-controller="account">Register</a></li>
+                <li><a asp-action="login" asp-controller="account">Login</a></li>
+            </ul>
+
+
+            <div class="toggle-button">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+
+
+
+
+
+    }
+
+    <!--Jquery-->
+    <script src="~/jquery/jquery.js"></script>
+
+    <script src="~/notifikacije.js"></script>
+    <script src="~/notifikacijeFaktuje.js"></script>
+    <script>
+            var pacijentID ="@userManager.GetUserId(User)";
+            $(document).ready(function () {
+                function prebrojiDijagnoze() {
+                    prebroji(0, 0, 0);
+                }
+
+                function spremiRazliku(razlika) {
+                    let diffDijagnoze;
+                    if (localStorage.getItem("diffDijagnoze") == null) {
+                        diffDijagnoze = 0;
+                    } else {
+                        diffDijagnoze = parseInt(JSON.parse(localStorage.getItem("diffDijagnoze")));
+                    }
+                    diffDijagnoze += razlika;
+                    localStorage.setItem("diffDijagnoze", JSON.stringify(diffDijagnoze));
+                    return diffDijagnoze;
+                }
+
+
+                function prebroji(recenzijeCount, time, br) {
+                    br == 0 ? time = 1 : time = 3000;
+                    br++;
+                    $.ajax({
+                        method: "GET",
+                        url: "/api/getpacijentpregledi/"+pacijentID,
+                        dataType: "json",
+                        data: "{}",
+                        success: function (ratings) {
+                            console.log(ratings);
+                            recenzijeCount = ratings.appointmentList.length;
+                            setTimeout(function () {
+                                $.ajax({
+                                    method: "GET",
+                                    url: "/api/getpacijentpregledi/"+pacijentID,
+                                    dataType: "json",
+                                    data: "[]",
+                                    success: function (ratingsUpdate) {
+                                        let razlikaSession = spremiRazliku(ratingsUpdate.appointmentList.length - recenzijeCount);
+
+                                        if (razlikaSession != 0) {
+                                            let razlikaSession = spremiRazliku(ratingsUpdate.appointmentList.length - recenzijeCount);
+                                            $("#divNotifikacijaDijagnoze").css("display", "block");
+                                            $("#manageDijagnoze").css("border-bottom", "5px solid #d9534f");
+                                            $("#notifikacijaDijagnoze").text(razlikaSession / 2);
+                                        } else {
+                                            $("#divNotifikacijaDijagnoze").css("display", "none");
+                                            $("#notifikacijaDijagnoze").text("");
+                                            $("#manageDijagnoze").css("border-bottom", "none");
+                                        }
+                                        $("#eKartonAkcija").on("click", () => {
+                                            localStorage.removeItem("diffDijagnoze");
+                                        });
+                                        prebroji(0, 0, br);
+                                    }
+                                });
+                            }, time);
+                        }
+                    });
+                }
+
+                prebrojiDijagnoze();
+            })
+
+    </script>
+    <script src="~/notifikacijeFaktureVlasnik.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+
+            $(".toggle-button").on("click", function () {
+                $(this).toggleClass("toggle .line1");
+                $(this).toggleClass("toggle .line2");
+                $(this).toggleClass("toggle .line3");
+                $(".nav-links").toggleClass("nav-active");
+                $(".toggle-button").toggleClass("change-color");
+            });
+
+
+
+
+
+        });
+    </script>
+
+    <!--Toastr(NuGet-Install-Package toastr -Version 2.1.1)-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+    <!-- JS dependencies BOOTOX  -->
+    <script src="~/bootbox.js/bootbox.js"></script>
+    <script src="~/bootstrap/js/bootstrap.js"></script>
+
+    <!--Datatables jquery-->
+    <script src="~/datatables/js/jquery.dataTables.js"></script>
+
+    <div>
+        @RenderBody()
+    </div>
+    @if (IsSectionDefined("scripts"))
+    {
+        @RenderSection("scripts", required: true)
+    }
+</body>
+</html>
+
+

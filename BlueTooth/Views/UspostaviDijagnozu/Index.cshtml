@@ -1,0 +1,44 @@
+﻿@model BlueTooth.ViewModels.UspostaviDijagnozuViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+<div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+    Pacijenti
+    <br /><br />
+    <table id="pacijenti" class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">Ime Prezime</th>
+                <th scope="col">Akcija</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Patients.Count(); i++)
+            {
+                int j = i + 1;
+                <tr>
+                    <th scope="col">@j</th>
+                    <th scope="col">@Model.Patients.ElementAt(i).Email</th>
+                    <th scope="col">@Model.Patients.ElementAt(i).FirstName  @Model.Patients.ElementAt(i).LastName</th>
+                    <th scope="col"><a asp-action="Detalji" asp-controller="UspostaviDijagnozu" asp-route-patientId="@Model.Patients.ElementAt(i).Id"   class="btn btn-success">Uspostavi dijagnozu</a></th>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script src="~/jquery-validation/jquery.validate.js"></script>
+    <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script>
+        $().ready(function () {
+            $("#pacijenti").DataTable();
+        });
+    </script>
+
+
+}
+

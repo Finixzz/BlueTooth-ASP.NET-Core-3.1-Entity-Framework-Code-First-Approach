@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "Prikaz";
+    Layout = "~/Views/_Layout.cshtml";
+}
+    <div style="width:70%; margin-left:auto; margin-right:auto;">
+        <table id="recenzije" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Ime prezime</th>
+                    <th scope="col">Ocjena</th>
+                    <th scope="col">Komentar</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                
+            </tbody>
+        </table>
+    </div>
+    
+
+@section scripts{ 
+
+  <script>
+      $(document).ready(function () {
+          function compare(a, b) {
+                if (a.mark < b.mark) {
+                    return -1;
+                }
+                if (a.mark > b.mark) {
+                    return 1;
+                }
+                return 0;
+            }
+          function createElement(r, i) {
+              let br = 0;
+              if (r.mark < 3) {
+                  return `<tr class="table-danger">
+                        <th scope="row">${i}</th>
+                        <td>${r.user.email}</td>
+                        <td>${r.user.firstName} ${r.user.lastName}</td>
+                        <td>${r.mark}</td>
+                        <td>${r.comment}</td>
+                      </tr>`;
+              }
+              if (r.mark > 3) {
+                   return `<tr class="table-success">
+                        <th scope="row">${i}</th>
+                        <td>${r.user.email}</td>
+                        <td>${r.user.firstName} ${r.user.lastName}</td>
+                        <td>${r.mark}</td>
+                        <td>${r.comment}</td>
+                      </tr>`;
+              }
+              if (r.mark == 3) {
+                  return `<tr class= "table-secondary">
+                        <th scope="row">${i}</th>
+                        <td>${r.user.email}</td>
+                        <td>${r.user.firstName} ${r.user.lastName}</td>
+                        <td>${r.mark}</td>
+                        <td>${r.comment}</td>
+                      </tr>`;
+              }    
+          }
+          $.ajax({
+              method: "GET",
+              url: "/api/GetAllRatingInfo",
+              dataType: "json",
+              data: "[]",
+              success: function (ratings) {
+                  ratings.sort(compare);
+                  ratings.forEach((rating, i) => {
+                      delete rating.user.passwordHash;
+                      delete rating.user.securityStamp;
+                      delete rating.user.concurrencyStamp;
+                      $("#recenzije").append(createElement(rating, i + 1));
+                  })
+                  $("#recenzije").DataTable();
+              }
+          })
+      });
+  </script>
+
+}
+

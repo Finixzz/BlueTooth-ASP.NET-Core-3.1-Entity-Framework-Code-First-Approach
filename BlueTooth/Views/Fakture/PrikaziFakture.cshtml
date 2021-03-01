@@ -1,0 +1,62 @@
+﻿@model IEnumerable<BlueTooth.Models.Bill>
+@inject UserManager<BlueTooth.Models.ApplicationUser> userManager;
+@{
+    ViewData["Title"] = "PrikaziFakture";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@if (!Model.Any())
+{
+    <div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+        <h1>Trenutno nema izdatih faktura</h1>
+    </div>
+}
+else
+{
+    float neto = 0;
+<div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+    <table id="fakturePregled">
+        <thead>
+            <tr class="table-info">
+                <th scope="col">#</th>
+                <th scope="col">Datum izdavanja fakture</th>
+                <th scope="col">Ukupna cijena</th>
+                <th scope="col">Detaljnije</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (int i = Model.Count()-1; i>=0; i--)
+            {
+
+                int rBr = i + 1;
+                neto = neto + Model.ElementAt(i).TotalPrice;
+                <tr>
+                    <th scope="col">@rBr</th>
+                    <th scope="col">@Model.ElementAt(i).Time</th>
+                    <th scope="col">@Model.ElementAt(i).TotalPrice KM</th>
+                    <th scope="col"><a asp-action="Detalji" asp-controller="Fakture" asp-route-id="@Model.ElementAt(i).Id"  class="btn btn-success" style="color: white;">Prikaži detalje</a></th>
+                </tr>
+            }
+            @if (User.IsInRole("Vlasnik"))
+            {
+                <h1 class="table-danger" style="text-align:center;">Ukupna bruto zarada: @neto KM</h1>
+
+            }
+            <br />
+        </tbody>
+    </table>
+</div>
+}
+
+
+@section scripts{ 
+    <script>
+        $().ready(function () {
+            $("#fakturePregled").DataTable();
+        })
+    </script>
+
+}
+

@@ -1,0 +1,96 @@
+﻿@model IEnumerable<BlueTooth.ViewModels.UpostaviFakturuViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@if (Model.Count() != 0)
+{
+    <div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+        <table id="fakture">
+            <thead>
+                <tr class="table-info">
+                    <th scope="col">#</th>
+                    <th scope="col">Email pacijenta</th>
+                    <th scope="col">Ime prezime</th>
+                    <th scope="col">Ukupna cijena</th>
+                    <th scope="col">Usluge</th>
+                    <th scope="col">Akcija</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    int k = i + 1;
+                    <tr style="border:1px solid black;">
+                        <th scope="col" style="border:1px solid black;">@k</th>
+                        <th scope="col" style="border:1px solid black;">@Model.ElementAt(i).Pacijent.Email</th>
+                        <th scope="col" style="border:1px solid black;">@Model.ElementAt(i).Pacijent.FirstName @Model.ElementAt(i).Pacijent.FirstName</th>
+                        <th scope="col" style="text-align:center; border:1px solid black; background-color:rgba(255, 0, 0,0.3);border-bottom:black;">@Model.ElementAt(i).UkupnaCijena</th>
+
+                        <td scope="col" style="border:1px solid black;">
+                            @for (int j = 0; j < Model.ElementAt(i).Usluge.Count(); j++)
+                            {
+
+                                @Model.ElementAt(i).Usluge.ElementAt(j).Name
+                                <hr />
+                            }
+                        </td>
+                        <form method="post">
+                            <th scope="col" style="border:1px solid black;"><button type="button" href="#" class="btn btn-success js-faktura" data-item-dcId="@Model.ElementAt(i).PregledId" data-item-price="@Model.ElementAt(i).UkupnaCijena">Fakturiši</button></th>
+
+                        </form>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+<div  class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+    <h1>Trenutno nema usluga za fakturisanje</h1>
+
+</div>
+ 
+  }
+
+        @section scripts{
+            <script src="~/jquery-validation/jquery.validate.js"></script>
+            <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+            <script>
+                $().ready(function () {
+                    $("#fakture").DataTable();
+
+
+                    $("#fakture").on("click", ".js-faktura", function (e) {
+                        e.preventDefault();
+                        let button = $(this);
+                        let faktura = {
+                            dentalCheckId: parseInt(button.attr("data-item-dcId")),
+                            time: "2020-06-01T18:37:10",
+                            totalPrice: parseFloat(button.attr("data-item-price"))
+                        };
+                        $.ajax({
+                            method: "POST",
+                            url: "/api/bills",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            data: JSON.stringify(faktura),
+                            success: function (data) {
+                                location.href = "/Fakture/Detalji/" + data.id;
+                            }
+
+
+
+
+                        })
+                    })
+                });
+            </script>
+
+        }
+

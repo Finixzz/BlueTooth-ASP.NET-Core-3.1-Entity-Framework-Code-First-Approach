@@ -1,0 +1,79 @@
+﻿
+@model IEnumerable<BlueTooth.ViewModels.PrikaziUspostavljeneDijagnozeViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@if (!Model.Any())
+{
+    <div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+        <h1>Trenutno nema pregleda koje ste evidentirali!</h1>
+
+    </div>
+}
+else
+{
+    <div class="d-container" style="width:70%; margin-left:auto; margin-right:auto;">
+        <table id="dijagnoze" class="table">
+            <thead >
+                <tr class="table-info">
+                    <th scope="col">#</th>
+                    <th scope="col">Email pacijenta</th>
+                    <th scope="col">Ime prezime</th>
+                    <th scope="col">Dijagnoza</th>
+                    <th scope="col">Napomena</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Usluge</th>
+                </tr>
+            </thead>
+            <tbody id="tableContent">
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    int k = i + 1;
+                <tr>
+                    <th scope="col">@k</th>
+                    <th scope="col">@Model.ElementAt(i).Pacijent.Email</th>
+                    <th scope="col">@Model.ElementAt(i).Pacijent.FirstName @Model.ElementAt(i).Pacijent.LastName</th>
+                    <th scope="col">@Model.ElementAt(i).Dijagnoza</th>
+                    @if (@Model.ElementAt(i).Napomena == "")
+                    {
+                        <th scope="col">Bez napomene</th>
+
+                    }
+                    else
+                    {
+                        <th scope="col">@Model.ElementAt(i).Napomena</th>
+
+                    }
+                    <th scope="col">@Model.ElementAt(i).Datum</th>
+                    <td scope="col">
+                        @for (int j = 0; j < Model.ElementAt(i).Usluge.Count(); j++)
+                        {
+
+
+
+                            @Model.ElementAt(i).Usluge.ElementAt(j).Name
+                            <hr />
+
+
+                        }
+                    </td>
+                </tr>
+                    }
+                    </tbody>
+        </table>
+        </div>
+        }
+
+        @section scripts{
+            <script>
+                $(document).ready(function () {
+                    $("#dijagnoze").DataTable();
+                })
+            </script>
+
+        }
+
+
+
