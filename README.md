@@ -1,11 +1,16 @@
 # BlueTooth-ASP.NET-Core-3.1-Entity-Framework-Code-First-Approach
 
 Subject name: System analysis and design, University of Zenica - Software engineering, 4th semester
+
 Project name: Analysis, design & implementation of dental healthcare system
+
 Project start date: 01.03.2020
+
 Project end date: 01.06.2020
 
+
 Summary
+
 With development of technology came significant changes in every aspect of people’s lives.
 Primarily, in today’s society the main focus is on web and mobile applications which have been
 designed in a way that makes our lives easier. These applications provide fast and easy access for their
@@ -23,6 +28,7 @@ application.
 
 
 1. Problem Description
+
 A common problem for people with any kind of health issues around the globe is reaching and
 contacting their health care providers (family doctor, dentist, nurse, technician..) , booking their
 appointments due to a big influx of patients, and of course spending hours in the waiting room in front
@@ -42,6 +48,7 @@ following chapters.
 
 
 2. Problem Solution
+
 Given the described problem that the dental health system has been facing for many years, below we
 will present you with a conceptual solution that will not only solve the described problem, but also
 raise the level of the dental health system. The application should cover all business aspects of private
@@ -56,7 +63,6 @@ also be the possibility of canceling the desired appointment no later than 24 ho
 scheduled appointment. The dentist, who is also a user of the application, will have a view of the
 schedule on a weekly basis and details of each appointment. They will be able to assign
 responsibilities to assistants and have an overview of their responsibilities. They will also have the
-
 ability to make diagnoses as well as a list of employees. During the analysis and design, our team
 identified 3 main functional modules, which are:
 
