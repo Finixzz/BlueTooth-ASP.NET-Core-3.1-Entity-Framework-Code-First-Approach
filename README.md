@@ -8,6 +8,8 @@ Project start date: 01.03.2020
 
 Project end date: 01.06.2020
 
+Videolink: https://www.youtube.com/watch?v=Rce7cAXGYkc&feature=emb_title&ab_channel=SamirLeme%C5%A1, 34:00-1:03
+
 
 Summary
 
@@ -93,3 +95,8 @@ The implementation of the solution is planned with the help of S.O.L.I.D, DRY, K
 design principles that allow scalability and robustness of the application, and independent testing of
 each module. Flexibility when migrating a database is also ensured by using repository pattern, and by
 using CQRS principle we are able to achieve the most optimal system performance.
+
+
+3. Additional features
+
+Bluetooth healthcare systetem is made as real time causal system where users of it are provided with notifications, which are handled by backend system in realtime based on specific user actions. Notification system is implemented from scratch without using any 3rd party dependencies like SignalR or Kafka. 
